@@ -1,0 +1,19 @@
+{
+  "name": "pac-scraper",
+  "version": "1.0.0",
+  "description": "25Live web scraper for the PACalendar platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vincentvella/pac-scraper.git"
+  },
+  "author": "Vincent Vella",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vincentvella/pac-scraper/issues"
+  },
+  "homepage": "https://github.com/vincentvella/pac-scraper#readme"
+}
