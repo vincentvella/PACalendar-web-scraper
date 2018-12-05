@@ -1,0 +1,10 @@
+version: '3'
+services:
+  pac-scraper:
+    container_name: pac-scraper
+    env_file:
+    - .env
+    build: .
+    image: pac-scraper
+    ports:
+    - "3146:3146"

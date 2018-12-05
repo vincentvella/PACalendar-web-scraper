@@ -4,6 +4,8 @@
   "description": "25Live web scraper for the PACalendar platform",
   "main": "index.js",
   "scripts": {
+    "build": "rimraf dist/ && babel ./src --out-dir dist/ --copy-files",
+    "start": "npm run build && gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +17,23 @@
   "bugs": {
     "url": "https://github.com/vincentvella/pac-scraper/issues"
   },
-  "homepage": "https://github.com/vincentvella/pac-scraper#readme"
+  "homepage": "https://github.com/vincentvella/pac-scraper#readme",
+  "dependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/node": "^7.0.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/register": "^7.0.0",
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "dotenv": "^6.1.0",
+    "firebase": "^5.5.9",
+    "firebase-admin": "^6.2.0",
+    "rimraf": "^2.6.2"
+  },
+  "devDependencies": {
+    "gulp-nodemon": "^2.4.1",
+    "nodemon": "^1.18.7"
+  }
 }
