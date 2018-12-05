@@ -28,6 +28,8 @@
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "dotenv": "^6.1.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
     "firebase": "^5.5.9",
     "firebase-admin": "^6.2.0",
     "rimraf": "^2.6.2"

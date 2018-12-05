@@ -11,6 +11,8 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _cheerio = _interopRequireDefault(require("cheerio"));
 
+var _express = _interopRequireDefault(require("express"));
+
 var _app = _interopRequireDefault(require("firebase/app"));
 
 require("firebase/database");
@@ -31,6 +33,16 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var app = (0, _express.default)();
+var port = process.env.PORT;
+app.set('view engine', 'ejs');
+app.use(_express.default.static('./public'));
+app.get('/', function (req, res) {
+  res.render('index');
+});
+app.listen(port, function () {
+  console.log("Our app is running on port ".concat(port));
+});
 var config = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -372,10 +384,11 @@ function () {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
+                console.log('INITIALIZING');
                 this.startScraper();
                 return _context7.abrupt("return", this);
 
-              case 2:
+              case 3:
               case "end":
                 return _context7.stop();
             }
