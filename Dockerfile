@@ -1,10 +1,10 @@
 FROM node:jessie
 
+RUN mkdir -p /usr/src/app
+COPY package.json package-lock.json ./src /usr/src/app/
+
 RUN npm install
 RUN npm run build
-RUN mkdir -p /usr/src/app
-
-COPY package.json package-lock.json /usr/src/app/
 
 COPY dist/ /usr/src/app/dist
 
