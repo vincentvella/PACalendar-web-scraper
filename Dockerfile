@@ -1,6 +1,11 @@
 FROM node:jessie
-WORKDIR /app
-COPY package.json package-lock.json /app/
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY package.json package-lock.json /usr/src/app/
 RUN npm install
-COPY . .
-CMD [ "node", "dist/index.js" ]
+
+COPY dist/ /usr/src/app/dist
+
+CMD [ "node", "dist/src/index.js" ]

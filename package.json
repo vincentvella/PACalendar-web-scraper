@@ -4,8 +4,10 @@
   "description": "25Live web scraper for the PACalendar platform",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist/ && babel ./src --out-dir dist/ --copy-files",
-    "start": "npm run build && gulp",
+    "dev": "npm run build && gulp",
+    "docker-build": "docker build -t pacalendar-scraper . --rm=true",
+    "start": "npm run build && node dist/src/index.js",
+    "build": "rimraf dist/src && babel ./src --out-dir dist/src --copy-files",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -36,7 +38,9 @@
     "rimraf": "^2.6.2"
   },
   "devDependencies": {
-    "gulp-nodemon": "^2.4.1",
-    "nodemon": "^1.18.7"
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-nodemon": "^2.4.2",
+    "gulp-plumber": "^1.2.1"
   }
 }
