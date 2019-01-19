@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm run build && gulp",
-    "docker-build": "docker build -t pacalendar-scraper . --rm=true",
     "start": "npm run build && node dist/src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/src && babel ./src --out-dir dist/src --copy-files",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy-update": "heroku container:push web && heroku container:release web"
   },
   "repository": {
     "type": "git",
