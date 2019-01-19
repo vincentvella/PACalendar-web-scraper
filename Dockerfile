@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 COPY package.json package-lock.json /usr/src/app/
 RUN npm install
-RUN npm build
+RUN npm run build
 
 COPY dist/ /usr/src/app/dist
 
