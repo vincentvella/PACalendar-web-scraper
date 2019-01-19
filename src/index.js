@@ -1,5 +1,6 @@
 import '@babel/polyfill';
 import axios from 'axios';
+import { get } from 'lodash';
 import cheerio from 'cheerio';
 import express from 'express';
 import firebase from 'firebase/app';
@@ -16,7 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Our app is running on port ${ port }`);
+  console.log(`Our app is running on port ${port}`);
 });
 
 const config = {
@@ -51,6 +52,8 @@ export default class WebScraper {
     this.runScraper = this.runScraper.bind(this);
     this.makeRequest = this.makeRequest.bind(this);
     this.getScrapedEvents = this.getScrapedEvents.bind(this);
+    this.getCurrentEvents = this.getCurrentEvents.bind(this);
+    this.getPendingWebEvents = this.getPendingWebEvents.bind(this);
     this.extractListingsFromHTML = this.extractListingsFromHTML.bind(this);
   }
   
@@ -91,7 +94,17 @@ export default class WebScraper {
   };
   
   async getScrapedEvents() {
-    const snapshot = await this.ref.child('/Scraped-Events').once('value');
+    const snapshot = await this.ref.child('/ScrapedEvents').once('value');
+    return snapshot.val();
+  }
+  
+  async getPendingWebEvents() {
+    const snapshot = await this.ref.child('/Web/Events').once('value');
+    return snapshot.val();
+  }
+  
+  async getCurrentEvents() {
+    const snapshot = await this.ref.child('/Mobile/Events').once('value');
     return snapshot.val();
   }
   
@@ -135,18 +148,28 @@ export default class WebScraper {
     return { ...WebScraper.condenseEvents(result, currentScrapedEvents) };
   }
   
+  removeIfExists(existingEvents, possibleEvents) {
+    Object.keys
+  }
+  
   async startScraper() {
     let year = 0;
     let date = new Date();
     let years = [date.getFullYear(), date.getFullYear() + 1];
     const run = async () => {
       if (year === 0) {
-        year ++;
+        year++;
       } else {
-        year --;
+        year--;
       }
-      let events = await this.runScraper(years[year]);
-      console.log('Events', Object.keys(events).length);
+      const currentEvents = await this.getCurrentEvents();
+      const firebaseEvents = await this.getScrapedEvents();
+      const scrapedEvents = await this.runScraper(years[year]);
+      const pendingWebEvents = await this.getPendingWebEvents();
+      const pendingEvents = get(firebaseEvents, 'pending', {});
+      const ignoredEvents = get(firebaseEvents, 'ignored', {});
+      // merge pending and ignored, the rest require no duplicates
+      const possibleEvents = { ...pendingEvents, ...scrapedEvents };
       setTimeout(() => {
         run().then(() => {
           console.log('DATE', years[year], new Date().toISOString());
@@ -165,6 +188,6 @@ export default class WebScraper {
   }
 }
 
-const webScraper = new WebScraper({ref});
+const webScraper = new WebScraper({ ref });
 webScraper.init();
 setTimeout(() => process.exit(), 86400000);

@@ -9,6 +9,8 @@ require("@babel/polyfill");
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _lodash = require("lodash");
+
 var _cheerio = _interopRequireDefault(require("cheerio"));
 
 var _express = _interopRequireDefault(require("express"));
@@ -82,6 +84,8 @@ function () {
     this.runScraper = this.runScraper.bind(this);
     this.makeRequest = this.makeRequest.bind(this);
     this.getScrapedEvents = this.getScrapedEvents.bind(this);
+    this.getCurrentEvents = this.getCurrentEvents.bind(this);
+    this.getPendingWebEvents = this.getPendingWebEvents.bind(this);
     this.extractListingsFromHTML = this.extractListingsFromHTML.bind(this);
   }
 
@@ -145,7 +149,7 @@ function () {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return this.ref.child('/Scraped-Events').once('value');
+                return this.ref.child('/ScrapedEvents').once('value');
 
               case 2:
                 snapshot = _context.sent;
@@ -164,19 +168,79 @@ function () {
       };
     }()
   }, {
-    key: "makeRequest",
+    key: "getPendingWebEvents",
     value: function () {
-      var _makeRequest = _asyncToGenerator(
+      var _getPendingWebEvents = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(i, j, year) {
-        var listings, response, html;
+      regeneratorRuntime.mark(function _callee2() {
+        var snapshot;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                _context2.next = 2;
+                return this.ref.child('/Web/Events').once('value');
+
+              case 2:
+                snapshot = _context2.sent;
+                return _context2.abrupt("return", snapshot.val());
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      return function getPendingWebEvents() {
+        return _getPendingWebEvents.apply(this, arguments);
+      };
+    }()
+  }, {
+    key: "getCurrentEvents",
+    value: function () {
+      var _getCurrentEvents = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3() {
+        var snapshot;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.ref.child('/Mobile/Events').once('value');
+
+              case 2:
+                snapshot = _context3.sent;
+                return _context3.abrupt("return", snapshot.val());
+
+              case 4:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      return function getCurrentEvents() {
+        return _getCurrentEvents.apply(this, arguments);
+      };
+    }()
+  }, {
+    key: "makeRequest",
+    value: function () {
+      var _makeRequest = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4(i, j, year) {
+        var listings, response, html;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
                 listings = {};
-                _context2.prev = 1;
-                _context2.next = 4;
+                _context4.prev = 1;
+                _context4.next = 4;
                 return _axios.default.get("https://25livepub.collegenet.com/calendars/arts-and-architecture-mixin?date=".concat(year).concat(i < 10 ? "0".concat(i) : i).concat(j < 10 ? "0".concat(j) : j, "&media=print"), {
                   headers: {
                     'content-type': 'text/html'
@@ -184,26 +248,26 @@ function () {
                 });
 
               case 4:
-                response = _context2.sent;
+                response = _context4.sent;
 
                 if (response.status === 200) {
                   html = response.data;
                   listings = _objectSpread({}, listings, this.extractListingsFromHTML(html));
                 }
 
-                return _context2.abrupt("return", listings);
+                return _context4.abrupt("return", listings);
 
               case 9:
-                _context2.prev = 9;
-                _context2.t0 = _context2["catch"](1);
+                _context4.prev = 9;
+                _context4.t0 = _context4["catch"](1);
                 console.warn('REQUEST ERROR:', "date=".concat(year).concat(i < 10 ? "0".concat(i) : i).concat(j < 10 ? "0".concat(j) : j));
 
               case 12:
               case "end":
-                return _context2.stop();
+                return _context4.stop();
             }
           }
-        }, _callee2, this, [[1, 9]]);
+        }, _callee4, this, [[1, 9]]);
       }));
 
       return function makeRequest(_x, _x2, _x3) {
@@ -215,13 +279,13 @@ function () {
     value: function () {
       var _runScraper = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee4(year) {
+      regeneratorRuntime.mark(function _callee6(year) {
         var _this2 = this;
 
         var dateVariables, i, j, result, currentScrapedEvents, val;
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
                 dateVariables = [];
 
@@ -237,26 +301,26 @@ function () {
 
                 result = {};
                 currentScrapedEvents = {};
-                _context4.prev = 4;
-                _context4.next = 7;
+                _context6.prev = 4;
+                _context6.next = 7;
                 return Promise.all(dateVariables.map(
                 /*#__PURE__*/
                 function () {
                   var _ref = _asyncToGenerator(
                   /*#__PURE__*/
-                  regeneratorRuntime.mark(function _callee3(date) {
-                    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                  regeneratorRuntime.mark(function _callee5(date) {
+                    return regeneratorRuntime.wrap(function _callee5$(_context5) {
                       while (1) {
-                        switch (_context3.prev = _context3.next) {
+                        switch (_context5.prev = _context5.next) {
                           case 0:
-                            return _context3.abrupt("return", _this2.makeRequest(date.i, date.j, date.year));
+                            return _context5.abrupt("return", _this2.makeRequest(date.i, date.j, date.year));
 
                           case 1:
                           case "end":
-                            return _context3.stop();
+                            return _context5.stop();
                         }
                       }
-                    }, _callee3, this);
+                    }, _callee5, this);
                   }));
 
                   return function (_x5) {
@@ -265,34 +329,34 @@ function () {
                 }()));
 
               case 7:
-                val = _context4.sent;
+                val = _context6.sent;
                 val.forEach(function (requestGroup) {
                   Object.keys(requestGroup).forEach(function (eventKey) {
                     result = _objectSpread({}, result, _defineProperty({}, eventKey, requestGroup[eventKey]));
                   });
                 });
-                _context4.next = 11;
+                _context6.next = 11;
                 return this.getScrapedEvents();
 
               case 11:
-                currentScrapedEvents = _context4.sent;
-                _context4.next = 17;
+                currentScrapedEvents = _context6.sent;
+                _context6.next = 17;
                 break;
 
               case 14:
-                _context4.prev = 14;
-                _context4.t0 = _context4["catch"](4);
+                _context6.prev = 14;
+                _context6.t0 = _context6["catch"](4);
                 console.warn('ERROR Condensing request');
 
               case 17:
-                return _context4.abrupt("return", _objectSpread({}, WebScraper.condenseEvents(result, currentScrapedEvents)));
+                return _context6.abrupt("return", _objectSpread({}, WebScraper.condenseEvents(result, currentScrapedEvents)));
 
               case 18:
               case "end":
-                return _context4.stop();
+                return _context6.stop();
             }
           }
-        }, _callee4, this, [[4, 14]]);
+        }, _callee6, this, [[4, 14]]);
       }));
 
       return function runScraper(_x4) {
@@ -304,13 +368,13 @@ function () {
     value: function () {
       var _startScraper = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee6() {
+      regeneratorRuntime.mark(function _callee8() {
         var _this3 = this;
 
         var year, date, years, run;
-        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 year = 0;
                 date = new Date();
@@ -321,11 +385,11 @@ function () {
                 function () {
                   var _ref2 = _asyncToGenerator(
                   /*#__PURE__*/
-                  regeneratorRuntime.mark(function _callee5() {
-                    var events;
-                    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                  regeneratorRuntime.mark(function _callee7() {
+                    var firebaseEvents, pendingWebEvents, pendingEvents, ignoredEvents, scrapedEvents;
+                    return regeneratorRuntime.wrap(function _callee7$(_context7) {
                       while (1) {
-                        switch (_context5.prev = _context5.next) {
+                        switch (_context7.prev = _context7.next) {
                           case 0:
                             if (year === 0) {
                               year++;
@@ -333,24 +397,36 @@ function () {
                               year--;
                             }
 
-                            _context5.next = 3;
-                            return _this3.runScraper(years[year]);
+                            _context7.next = 3;
+                            return _this3.getScrapedEvents();
 
                           case 3:
-                            events = _context5.sent;
-                            console.log('Events', Object.keys(events).length);
+                            firebaseEvents = _context7.sent;
+                            _context7.next = 6;
+                            return _this3.getPendingWebEvents();
+
+                          case 6:
+                            pendingWebEvents = _context7.sent;
+                            pendingEvents = (0, _lodash.get)(firebaseEvents, 'pending', {});
+                            ignoredEvents = (0, _lodash.get)(firebaseEvents, 'ignored', {});
+                            _context7.next = 11;
+                            return _this3.runScraper(years[year]);
+
+                          case 11:
+                            scrapedEvents = _context7.sent;
+                            console.log('New Events', _objectSpread({}, pendingEvents, scrapedEvents));
                             setTimeout(function () {
                               run().then(function () {
                                 console.log('DATE', years[year], new Date().toISOString());
                               });
                             }, 1000 * 60 * 30);
 
-                          case 6:
+                          case 14:
                           case "end":
-                            return _context5.stop();
+                            return _context7.stop();
                         }
                       }
-                    }, _callee5, this);
+                    }, _callee7, this);
                   }));
 
                   return function run() {
@@ -364,10 +440,10 @@ function () {
 
               case 5:
               case "end":
-                return _context6.stop();
+                return _context8.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee8, this);
       }));
 
       return function startScraper() {
@@ -379,21 +455,21 @@ function () {
     value: function () {
       var _init = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee7() {
-        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+      regeneratorRuntime.mark(function _callee9() {
+        return regeneratorRuntime.wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
                 console.log('INITIALIZING');
                 this.startScraper();
-                return _context7.abrupt("return", this);
+                return _context9.abrupt("return", this);
 
               case 3:
               case "end":
-                return _context7.stop();
+                return _context9.stop();
             }
           }
-        }, _callee7, this);
+        }, _callee9, this);
       }));
 
       return function init() {
