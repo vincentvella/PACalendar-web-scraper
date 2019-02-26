@@ -15,21 +15,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-const changeYear = (year) => {
-  if (year === 0) {
-    return year += 1;
-  } else {
-    return year -= 1;
+class Scraper {
+  constructor(props) {
+    this.ref = props.ref;
   }
-};
 
-const toHex = (str) => {
-  str = str.toString();
-  let hex = '';
-  for (let i = 0; i < str.length; i++) {
-    hex += `${str.charCodeAt(i).toString(16)}`;
+  async startStatusProcess() {
+    let year = 0;
+    let date = new Date();
+    let years = [date.getFullYear(), date.getFullYear() + 1];
+    const run = async () => {
+      console.log('hey');
+      setTimeout(() => {
+        run().then(() => {
+          console.log('DATE', years[year], new Date().toISOString());
+        });
+      }, 1000 * 60 * 30);
+    };
+    run().then(() => {
+      console.log('DATE', years[year], new Date().toISOString());
+    });
   }
-  return hex.trim();
-};
 
-export default { changeYear, toHex };
+  async init() {
+    console.log('INITIALIZING');
+    this.startStatusProcess();
+    return this;
+  }
+}
+
+export default Scraper;
