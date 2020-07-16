@@ -33,7 +33,7 @@
     "express": "^4.16.4",
     "firebase": "^5.5.9",
     "firebase-admin": "^6.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "rimraf": "^2.6.2"
   },
   "devDependencies": {
